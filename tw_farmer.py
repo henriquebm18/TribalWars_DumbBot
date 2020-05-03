@@ -8,10 +8,9 @@ import pyautogui
 #run from terminal in a virtual machine
 
 #%% parametres a modifier
-
-villages_code = [25599, 28334, 23820]
-#how_many_barbers = [55, 100, 180]
-how_many_barbers = [25, 50, 50]
+from mes_villages import villages_code
+how_many_a = [12, 15, 12]
+how_many_b = [35, 70, 70]
 time_space = 60 #minutes
 
 #%%
@@ -34,15 +33,16 @@ class KeyboardCommands():
             pyautogui.press('b')
             time.sleep(.2+random()/10)
 
-    def send_spaced_2bs(self, how_much):
-        for x in range(how_much):
-            pyautogui.press('b')
-            time.sleep(.2+random()/10)
+    def send_spaced_bs2(self, how_much):
+        pyautogui.press('b', presses=how_much, interval=.21)
 
     def send_spaced_as(self, how_much):
         for x in range(how_much):
             pyautogui.press('a')
             time.sleep(.2+random()/10)
+
+    def send_spaced_as2(self, how_much):
+        pyautogui.press('a', presses=how_much, interval=.21)
 
 def open_farm_tab(village):
     if platform == 'darwin':
@@ -60,8 +60,8 @@ def farm_coordinator(tcl):
         time.sleep(5)
         tcl.run_js_script()
         time.sleep(4)
-        tcl.send_spaced_as(12)
-        tcl.send_spaced_bs(how_many_barbers[x])
+        tcl.send_spaced_as(how_many_a[x])
+        tcl.send_spaced_bs(how_many_b[x])
         time.sleep(.5)
         tcl.close_tab()
 #%%
@@ -70,11 +70,12 @@ if __name__ == '__main__':
 
     try:
         while True:
-            #for x in range(3):
-            #    print('\r\a', end='', flush=True)
-            #    time.sleep(1)
-            print(time.strftime("%a, %d %b %Y %H:%M:%S"))
             s = time.time()
+            if platform != 'linux':
+                for x in range(3):
+                    print('\r\a', end='', flush=True)
+                    time.sleep(1)
+            print(time.strftime("%a, %d %b %Y %H:%M:%S"))
             farm_coordinator(tcl)
             elapsed_time = time.time()-s
             print('done in {}s\n.'.format(round(elapsed_time,3)))
